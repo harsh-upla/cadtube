@@ -29,20 +29,22 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 7576 # <-- Added your custom VPS port here!
           script: |
+            # Force the terminal to load NVM (Node/NPM/PM2 paths)
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            
             # Navigate to the project directory
             cd /var/www/cadtube.com
             
-            # If the directory is empty, clone your repo. Otherwise, just pull changes.
+            # Pull changes
             if [ -d ".git" ]; then
               git pull origin main
             else
               git clone https://github.com/harsh-upla/cadtube.git .
             fi
             
-            # Install dependencies and build project
+            # Install, build, and deploy
             npm install --omit=dev
             npm run build
-            
-            # Restart or Start the application with PM2
             pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
             pm2 save
