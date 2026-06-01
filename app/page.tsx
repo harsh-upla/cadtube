@@ -348,12 +348,12 @@ const page = () => {
                   Download
                 </button>
 
-                <Link
+                {/* <Link
                   href="#"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 border border-blue-700 rounded cursor-pointer text-xl"
                 >
                   Watch without Ads
-                </Link>
+                </Link> */}
               </div>
             </div>
           </form>
