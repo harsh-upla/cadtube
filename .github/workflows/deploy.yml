@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+# This line forces GitHub's runner to use Node 24 and clears the warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # <-- Fixed this line right here!
+          node-version: '24'
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
