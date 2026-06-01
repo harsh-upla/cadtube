@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-with-version: '20' # Matches standard Node 20 LTS environments
+          node-with-version: '24' # Matches standard Node 20 LTS environments
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
