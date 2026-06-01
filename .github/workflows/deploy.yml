@@ -1,0 +1,44 @@
+name: Deploy Next.js App
+
+on:
+  push:
+    branches:
+      - main # Change this if your primary branch is named 'master'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-with-version: '20' # Matches standard Node 20 LTS environments
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Navigate to the project directory
+            cd /var/www/cadtube.com
+            
+            # If the directory is empty, clone your repo. Otherwise, just pull changes.
+            if [ -d ".git" ]; then
+              git pull origin main
+            else
+              git clone https://github.com/harsh-upla/cadtube.git .
+            fi
+            
+            # Install dependencies and build project
+            npm install --omit=dev
+            npm run build
+            
+            # Restart or Start the application with PM2
+            pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
+            pm2 save
