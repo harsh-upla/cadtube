@@ -3,7 +3,7 @@ name: Deploy Next.js App
 on:
   push:
     branches:
-      - main # Change this if your primary branch is named 'master'
+      - main
 
 jobs:
   deploy:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-with-version: '24' # Matches standard Node 20 LTS environments
+          node-version: '24' # <-- Fixed this line right here!
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
