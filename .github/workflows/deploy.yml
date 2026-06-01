@@ -45,4 +45,4 @@ jobs:
             
             # Restart or Start the application with PM2
             pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
-            pm2 save
+            pm2 save 
