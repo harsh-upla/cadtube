@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "CadTube",
@@ -14,10 +15,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" >
+      <head>
+
+      </head>
       <body className="w-full h-full bg-[#e2e1dc]">
         <Navbar />
         {children}
       </body>
+      <GoogleAnalytics gaId="G-3MR9Y99HH0" />
     </html>
   );
 }
