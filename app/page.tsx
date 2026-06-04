@@ -168,6 +168,7 @@ const page = () => {
 
     if (!downloadFormatID) {
       seterror("Please select a format to download");
+      setloading(false);
       return;
     }
 
@@ -179,6 +180,7 @@ const page = () => {
       );
 
       window.location.href = `/api/download?audioUrl=${safeAudioUrl}&title=${encodeURIComponent(fetchedForm.title)}`;
+      setloading(false);
       return;
     }
 
@@ -188,6 +190,7 @@ const page = () => {
           ?.url ?? "",
       );
       window.location.href = `/api/download?videoUrl=${safeVideoURL}&title=${encodeURIComponent(fetchedForm.title)}`;
+      setloading(false);
       return;
     }
 
