@@ -41,17 +41,17 @@ const page = () => {
     const selectedFormat = fetchedForm?.vcodecFormats.find(
       (format) => format.format_note === selectedFormatStr,
     );
-
-    if (!selectedFormat) {
-      alert("Selected format not found in the available formats");
-      return;
-    }
-
+    
     if (selectedFormat.includes("mp3")) {
       const audioFormat = fetchedForm?.acodecFormats.find(
         (format) => format.format_note === "medium",
       ).format_id;
       setdownloadFormatID(audioFormat); // Assuming 140 is the format ID for mp3 audio
+      return;
+    }
+
+    if (!selectedFormat) {
+      alert("Selected format not found in the available formats");
       return;
     }
 
