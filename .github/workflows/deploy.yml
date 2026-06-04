@@ -13,21 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 7576 # <-- Added your custom VPS port here!
+          port: 7576
           script: |
             # Force the terminal to load NVM (Node/NPM/PM2 paths)
             export NVM_DIR="$HOME/.nvm"
@@ -36,15 +28,16 @@ jobs:
             # Navigate to the project directory
             cd /var/www/cadtube.com
             
-            # Pull changes
-            if [ -d ".git" ]; then
-              git pull origin main
-            else
-              git clone https://github.com/harsh-upla/cadtube.git .
-            fi
+            # Pull changes cleanly
+            git reset --hard HEAD
+            git pull origin main
             
-            # Install, build, and deploy
-            npm install --omit=dev
+            # Install ALL dependencies so Next.js can compile
+            npm install
+            
+            # Build the production application (creates the .next folder)
             npm run build
-            pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
+            
+            # Restart your existing PM2 process safely
+            pm2 restart cadtube || pm2 start npm --name "cadtube" -- start
             pm2 save
