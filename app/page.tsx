@@ -273,63 +273,63 @@ const page = () => {
       </div>
 
       {loading && <InfinitySpin width="200" height="200" color="#2b7fff" />}
-       {fetchedForm && ( 
-      <div className="w-full h-full flex flex-col md:flex-row gap-7 items-center justify-center">
-        <div className="">
-          <div className="w-5/6 md:w-160 md:h-90 h-52 mx-auto relative">
-            <Image
-              src={fetchedForm?.thumbnailurl ?? "/logo.png"}
-              alt="Thumbnail not found"
-              fill
-              className="object-contain"
-            />
-            <div className="w-fit px-2 py-0.5 bg-[#6363639a] text-white text-lg absolute bottom-2 right-2 rounded-sm">
-              {fetchedForm?.duration_string ?? `11:11`}
-            </div>
-          </div>
-          <h2 className="text-white text-xl font-bold text-start mt-2">
-            {fetchedForm?.title ?? "Title of the video"}
-          </h2>
-          <Link
-            href={fetchedForm?.channel_url ?? "#"}
-            className="text-white flex items-center w-fit ml-0 "
-          >
-            <Image
-              src={"/youtube.svg"}
-              alt="Channel thumbnail not found"
-              width={40}
-              height={40}
-              className="mr-3 "
-            />
-            <div className="Flex flex-col  gap-1">
-              <div className="text-lg">
-                {fetchedForm?.channel ?? "channel name"}
+      {fetchedForm && (
+        <div className="w-full h-full flex flex-col md:flex-row gap-7 items-center justify-center">
+          <div className="">
+            <div className="w-5/6 md:w-160 md:h-90 h-52 mx-auto relative">
+              <Image
+                src={fetchedForm?.thumbnailurl ?? "/logo.png"}
+                alt="Thumbnail not found"
+                fill
+                className="object-contain"
+              />
+              <div className="w-fit px-2 py-0.5 bg-[#6363639a] text-white text-lg absolute bottom-2 right-2 rounded-sm">
+                {fetchedForm?.duration_string ?? `11:11`}
               </div>
-              <div>{fetchedForm?.channel_tag ?? "@xyz"}</div>
             </div>
-            <span className="w-fit pl-5">
-              <span>{formatSubscribers(fetchedForm?.subscribers) ?? 0} </span>
-              {/* <span>00 </span> */}
-              Subscribers
-            </span>
-          </Link>
-        </div>
-
-        <form
-          action={handleDownload}
-          className="flex flex-col items-center gap-5 mt-5"
-        >
-          <div className="flex gap-5 items-center">
-            <h2 className="text-white font-bold text-xl">Choose Quality :</h2>
-            <select
-              className="bg-[#2b80ff5b] text-white px-4 py-2 rounded-sm border-2 border-[#fff0] focus:ring-2 focus:ring-blue-700  cursor-pointer"
-              name="quality"
-              id="select-quality"
-              onChange={(e) => {
-                handleSelectChange(e);
-              }}
+            <h2 className="text-white text-xl font-bold text-start mt-2">
+              {fetchedForm?.title ?? "Title of the video"}
+            </h2>
+            <Link
+              href={fetchedForm?.channel_url ?? "#"}
+              className="text-white flex items-center w-fit ml-0 "
             >
-              {/* {fetchedForm &&
+              <Image
+                src={"/youtube.svg"}
+                alt="Channel thumbnail not found"
+                width={40}
+                height={40}
+                className="mr-3 "
+              />
+              <div className="Flex flex-col  gap-1">
+                <div className="text-lg">
+                  {fetchedForm?.channel ?? "channel name"}
+                </div>
+                <div>{fetchedForm?.channel_tag ?? "@xyz"}</div>
+              </div>
+              <span className="w-fit pl-5">
+                <span>{formatSubscribers(fetchedForm?.subscribers) ?? 0} </span>
+                {/* <span>00 </span> */}
+                Subscribers
+              </span>
+            </Link>
+          </div>
+
+          <form
+            action={handleDownload}
+            className="flex flex-col items-center gap-5 mt-5"
+          >
+            <div className="flex gap-5 items-center">
+              <h2 className="text-white font-bold text-xl">Choose Quality :</h2>
+              <select
+                className="bg-[#2b80ff5b] text-white px-4 py-2 rounded-sm border-2 border-[#fff0] focus:ring-2 focus:ring-blue-700  cursor-pointer"
+                name="quality"
+                id="select-quality"
+                onChange={(e) => {
+                  handleSelectChange(e);
+                }}
+              >
+                {fetchedForm &&
                   fetchedForm.formatsString.map((formatStr, index) => (
                     <option
                       key={index}
@@ -338,37 +338,36 @@ const page = () => {
                     >
                       {formatStr}
                     </option>
-                    
-                  ))} */}
-              <option
+                  ))}
+                {/* <option
                 value={`quality 18 (360p)`}
                 className="bg-[#2b80ff5b] text-black px-4 py-2 rounded-sm border-2 border-[#fff0] focus:ring-2 focus:ring-blue-700 cursor-pointer"
               >
                 {`quality 18 (360p)`}
-              </option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-3 items-center justify-center">
-            <h3 className="text-red-500 text-xl text-center">{error}</h3>
-            <div className="flex flex-col gap-4 items-center">
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 border border-blue-700 rounded cursor-pointer text-xl"
-              >
-                Download
-              </button>
+              </option> */}
+              </select>
+            </div>
+            <div className="flex flex-col gap-3 items-center justify-center">
+              <h3 className="text-red-500 text-xl text-center">{error}</h3>
+              <div className="flex flex-col gap-4 items-center">
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 border border-blue-700 rounded cursor-pointer text-xl"
+                >
+                  Download
+                </button>
 
-              {/* <Link
+                {/* <Link
                   href="#"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 border border-blue-700 rounded cursor-pointer text-xl"
                 >
                   Watch without Ads
                 </Link> */}
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
-       )} 
+          </form>
+        </div>
+      )}
     </div>
   );
 };
