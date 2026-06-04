@@ -273,7 +273,7 @@ const page = () => {
       </div>
 
       {loading && <InfinitySpin width="200" height="200" color="#2b7fff" />}
-      {/* {fetchedForm && ( */}
+       {fetchedForm && ( 
       <div className="w-full h-full flex flex-col md:flex-row gap-7 items-center justify-center">
         <div className="">
           <div className="w-5/6 md:w-160 md:h-90 h-52 mx-auto relative">
@@ -308,8 +308,8 @@ const page = () => {
               <div>{fetchedForm?.channel_tag ?? "@xyz"}</div>
             </div>
             <span className="w-fit pl-5">
-              {/* <span>{formatSubscribers(fetchedForm?.subscribers) ?? 0} </span> */}
-              <span>00 </span>
+              <span>{formatSubscribers(fetchedForm?.subscribers) ?? 0} </span>
+              {/* <span>00 </span> */}
               Subscribers
             </span>
           </Link>
@@ -368,7 +368,7 @@ const page = () => {
           </div>
         </form>
       </div>
-      {/* )} */}
+       )} 
     </div>
   );
 };
