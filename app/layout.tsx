@@ -23,12 +23,12 @@ export default function RootLayout({
       <body className="w-full h-full bg-[#e2e1dc]">
         <Navbar />
         {children}
+      </body>
         <Script 
           src="https://al5sm.com/tag.min.js" 
           data-zone="11105050" 
           strategy="afterInteractive" 
         />
-      </body>
       <GoogleAnalytics gaId="G-3MR9Y99HH0" />
     </html>
   );
