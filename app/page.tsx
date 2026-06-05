@@ -41,8 +41,8 @@ const page = () => {
     const selectedFormat = fetchedForm?.vcodecFormats.find(
       (format) => format.format_note === selectedFormatStr,
     );
-    
-    if (selectedFormat.includes("mp3")) {
+
+    if (selectedFormatStr.includes("mp3")) {
       const audioFormat = fetchedForm?.acodecFormats.find(
         (format) => format.format_note === "medium",
       ).format_id;
@@ -101,7 +101,7 @@ const page = () => {
     }
 
     const data = await res.json();
-
+    // console.log(data);
     const acodecFormats = data.info.formats
       .filter((format: any) => {
         return (
@@ -219,7 +219,7 @@ const page = () => {
     window.location.href = `/api/downloadffmpeg?videourl=${encodedVideoUrl}&audiourl=${encodedAudioUrl}&title=${encodedTitle}`;
 
     // Handle the response for the download initiation if needed
-    alert("Download initiated successfully!");
+    alert("Download started successfully!");
     setloading(false);
   };
 
