@@ -17,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <head>
+        <Script id="monetag-ad-tag" strategy="afterInteractive">{`(function(s){s.dataset.zone='11105050',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}</Script>
         <meta name="google-adsense-account" content="ca-pub-9342853720075226"></meta>
         <meta name="monetag" content="5eca832e5b87b09ba6dc00bbb6c26d7e"></meta>
       </head>
@@ -24,11 +25,6 @@ export default function RootLayout({
         <Navbar />
         {children}
       </body>
-        <Script 
-          src="https://al5sm.com/tag.min.js" 
-          data-zone="11105050" 
-          strategy="afterInteractive" 
-        />
       <GoogleAnalytics gaId="G-3MR9Y99HH0" />
     </html>
   );
