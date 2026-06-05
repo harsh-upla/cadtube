@@ -22,9 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" >
       <body className="w-full h-full bg-[#e2e1dc]">
-        <Script 
-          id="monetag-script" 
-          strategy="beforeInteractive" 
+        <script
           dangerouslySetInnerHTML={{
             __html: `(function(s){s.dataset.zone='11105050',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
           }}
