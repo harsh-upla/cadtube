@@ -28,8 +28,8 @@ export default function RootLayout({
         />
         <Navbar />
         {children}
-      </body>
       <GoogleAnalytics gaId="G-3MR9Y99HH0" />
+      </body>
     </html>
   );
 }
