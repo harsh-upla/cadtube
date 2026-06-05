@@ -21,10 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" >
-      <head>
-        <Script id="monetag-script">{`(function(s){s.dataset.zone='11105050',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}</Script>
-      </head>
       <body className="w-full h-full bg-[#e2e1dc]">
+        <Script 
+          id="monetag-script" 
+          strategy="beforeInteractive" 
+          dangerouslySetInnerHTML={{
+            __html: `(function(s){s.dataset.zone='11105050',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
+          }}
+        />
         <Navbar />
         {children}
       <GoogleAnalytics gaId="G-3MR9Y99HH0" />
