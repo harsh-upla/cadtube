@@ -37,18 +37,20 @@ const page = () => {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedFormatStr = e.target.value;
-
-    const selectedFormat = fetchedForm?.vcodecFormats.find(
-      (format) => format.format_note === selectedFormatStr,
-    );
-
+    
     if (selectedFormatStr.includes("mp3")) {
       const audioFormat = fetchedForm?.acodecFormats.find(
         (format) => format.format_note === "medium",
       ).format_id;
+      // console.log("fetchedForm acodecFormats:", fetchedForm?.acodecFormats);
+      // console.log("Selected mp3 format ID:", audioFormat);
       setdownloadFormatID(audioFormat); // Assuming 140 is the format ID for mp3 audio
       return;
     }
+    
+    const selectedFormat = fetchedForm?.vcodecFormats.find(
+      (format) => format.format_note === selectedFormatStr,
+    );
 
     if (!selectedFormat) {
       alert("Selected format not found in the available formats");
@@ -158,6 +160,7 @@ const page = () => {
 
   const handleDownload = async () => {
     if (loading) {
+      seterror("wait something is in progress !");
       return;
     }
     setloading(true);
@@ -172,14 +175,14 @@ const page = () => {
       return;
     }
 
-    if (downloadFormatID === 140) {
+    if (downloadFormatID == 140) {
       const safeAudioUrl = encodeURIComponent(
         fetchedForm?.acodecFormats.find(
           (format) => format.format_note === "medium",
         )?.audio_url ?? "",
       );
 
-      window.location.href = `/api/download?audioUrl=${safeAudioUrl}&title=${encodeURIComponent(fetchedForm.title)}`;
+      window.location.href = `/api/download?audiourl=${safeAudioUrl}&title=${encodeURIComponent(fetchedForm.title)}`;
       setloading(false);
       return;
     }

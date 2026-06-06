@@ -9,20 +9,19 @@ export async function GET(request: Request) {
   try {
     // 1. Get the parameters from the URL query string
     const { searchParams } = new URL(request.url);
-    const videoUrl = searchParams.get('videoUrl');
-    const filename = searchParams.get('title') || 'video';
+    const audiourl = searchParams.get('audiourl');
+    const filename = searchParams.get('title') || 'audio';
 
     // ==========================================
     // CHECK 1: Strict URL Validation
     // ==========================================
-    if (!videoUrl) {
-      return NextResponse.json({ error: 'Missing videoUrl parameter' }, { status: 400 });
+    if (!audiourl) {
+      return NextResponse.json({ error: 'Missing audiourl parameter' }, { status: 400 });
     }
 
     try {
-      const parsedUrl = new URL(videoUrl);
+      const parsedUrl = new URL(audiourl);
       // STRICTLY allow only http and https. 
-      // This prevents SSRF and local file reading (e.g., file://, unix://, tcp://)
       if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
         return NextResponse.json({ error: 'Invalid URL protocol' }, { status: 400 });
       }
@@ -31,17 +30,17 @@ export async function GET(request: Request) {
     }
 
     // Sanitize the filename for safe browser downloading
-    const safeFilename = safeTitle(filename) + '.mp4';
+    const safeFilename = safeTitle(filename) + '.mp3';
 
-    // 2. Spawn FFmpeg process
+    // 2. Spawn FFmpeg process for AUDIO ONLY
     const ffmpegProcess = spawn('ffmpeg', [
       '-y',
-      '-i', videoUrl,            
-      '-c', 'copy',              
-      '-bsf:a', 'aac_adtstoasc',  
-      '-f', 'mp4',               
-      '-movflags', 'frag_keyframe+empty_moov', 
-      '-'                        
+      '-i', audiourl,            
+      '-vn',                  // Crucial: Drops the video stream entirely
+      '-c:a', 'libmp3lame',   // Encodes the audio track to MP3
+      '-b:a', '192k',         // Sets a solid audio bitrate (192kbps)
+      '-f', 'mp3',            // Forces the output format to be MP3
+      '-'                     // Pipes output to standard out
     ]);
 
     // ==========================================
@@ -51,7 +50,6 @@ export async function GET(request: Request) {
     const killProcess = (reason: string) => {
       if (!isCleanedUp && !ffmpegProcess.killed) {
         console.log(`[FFmpeg] Killing process. Reason: ${reason}`);
-        // SIGKILL forces the OS to terminate the process immediately
         ffmpegProcess.kill('SIGKILL');
         isCleanedUp = true;
       }
@@ -67,7 +65,6 @@ export async function GET(request: Request) {
     // ==========================================
     // CHECK 4: Request Abort Signal (Client Disconnect)
     // ==========================================
-    // This catches network drops/tab closures much more reliably than stream.cancel()
     request.signal.addEventListener('abort', () => {
       killProcess('Client aborted request / disconnected');
       clearTimeout(timeoutId);
@@ -77,11 +74,9 @@ export async function GET(request: Request) {
     const responseStream = new ReadableStream({
       start(controller) {
         ffmpegProcess.stdout.on('data', (chunk) => {
-          // If the stream is still active, enqueue data
           try {
             controller.enqueue(chunk);
           } catch (e) {
-            // If the controller errors out (e.g., browser buffer full/closed), kill process
             killProcess('Stream controller error during enqueue');
           }
         });
@@ -93,7 +88,6 @@ export async function GET(request: Request) {
           try { controller.close(); } catch (e) {}
         });
 
-        // Handle process errors specifically
         ffmpegProcess.on('error', (err) => {
           console.error('[FFmpeg] Process error:', err);
           killProcess('Process error');
@@ -111,10 +105,9 @@ export async function GET(request: Request) {
     // 4. Return the stream directly to the browser
     return new NextResponse(responseStream, {
       headers: {
-        'Content-Type': 'video/mp4',
+        'Content-Type': 'audio/mpeg', // Updated from video/mp4
         'Content-Disposition': `attachment; filename="${safeFilename}"`,
         'Transfer-Encoding': 'chunked', 
-        // Optional but recommended: Tell browsers not to cache this stream
         'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
       },
     });
